@@ -1,5 +1,8 @@
 package zytrust.facturas.service;
 
+import javax.validation.Valid;
+
+import zytrust.facturas.dto.FacturaReq;
 /*
  * @(#)Cliente.java
  *
@@ -21,4 +24,6 @@ public interface FacturaService extends CrudService<Factura, String> {
 
     Factura cambiarStatus(Factura t) throws Exception;
     Factura actualizarTotales(Factura t) throws Exception;
+	
+    void create(FacturaReq facturaReq);
 }

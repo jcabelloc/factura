@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import zytrust.facturas.dto.FacturaDetailsResponse;
+import zytrust.facturas.dto.FacturaReq;
 import zytrust.facturas.dto.FacturaRequest;
 import zytrust.facturas.dto.FacturaResponse;
 import zytrust.facturas.exception.ResourceNotFoundException;
@@ -83,7 +84,13 @@ public class FacturaController {
                 converter.convertFacturaDetailsToResponse(
                         factura), HttpStatus.OK);
     }
-
+    
+    @PostMapping()
+    public void crearFactura(@Valid @RequestBody FacturaReq facturaReq) {
+    	
+    	facturaService.create(facturaReq);
+    }
+    
     /**@param  request  un obejto json con los parametros de una factura
     * @param   clienteId que se extrae del path
     * @return      el objeto factura con el status Http200

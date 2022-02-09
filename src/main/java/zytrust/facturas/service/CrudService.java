@@ -43,7 +43,7 @@ public interface CrudService <T, ID> {
      * @return      el repositry con la funcion de encontrar por id
      * @throws Exception Excepción durante el proceso de busqueda por id
      */
-    Optional<T> getById(ID id) throws Exception;
+    Optional<T> getById(ID id);
 
     /**
      * @param id   El identificador del obajeto que se eliminará

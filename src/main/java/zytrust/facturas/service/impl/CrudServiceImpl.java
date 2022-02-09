@@ -42,7 +42,7 @@ public abstract class CrudServiceImpl<T, ID> implements CrudService<T, ID> {
 
 
     @Override
-    public Optional<T> getById(ID id) throws Exception {
+    public Optional<T> getById(ID id) {
         return getRepository().findById(id);
     }
 
