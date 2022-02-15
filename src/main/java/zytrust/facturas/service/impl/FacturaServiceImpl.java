@@ -1,4 +1,6 @@
 package zytrust.facturas.service.impl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /*
  * @(#)Cliente.java
  *
@@ -17,6 +19,7 @@ package zytrust.facturas.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import zytrust.facturas.controller.FacturaController;
 import zytrust.facturas.dto.FacturaReq;
 import zytrust.facturas.exception.ResourceNotFoundException;
 import zytrust.facturas.exception.ZyTrustException;
@@ -53,6 +56,9 @@ public class FacturaServiceImpl extends CrudServiceImpl<Factura, String>
     
     @Autowired
     ProductoFacturaService productoFacturaService;
+    
+    private static final Logger logger = LoggerFactory.getLogger(FacturaServiceImpl.class);
+
 
     @Override
     protected GenericRepository<Factura, String> getRepository() {
@@ -83,39 +89,47 @@ public class FacturaServiceImpl extends CrudServiceImpl<Factura, String>
 
 	@Override
 	public void create(FacturaReq facturaReq) {
-		
-		// Validar si el cliente existe
-		Optional<Cliente> opt = clienteService.getById(facturaReq.getIdCliente());
-		if (opt.isEmpty()) {
-			throw new ZyTrustException(CodigoError.CLIENTE_NO_EXISTE);
-		}
-
-		
-		
-		// Detalles de la factura
-		List<ProductoFactura> productos = new ArrayList<>();
-		// List<ProductoFactura> productos = productoFacturaService.buildProductosFacturas(facturaReq.getDetalles());
-		
-		Factura factura = Factura
-				.builder()
-				.fechaEmision(LocalDate.now())
-				.fechaVencimiento(facturaReq.getFechaVencimiento())
-				.productos(productos)
-				.build();
-		factura.setProductos(productos);
-		
-		// Almacenar el PDF de la factura en el FileSystem
-		/*
 		try {
-			archivoService.create("F001-24", "nombrePlantilla", "ruta");	
-		} catch (IOException e) {
-			// logging
+			// Validar si el cliente existe
+			Optional<Cliente> opt = clienteService.getById(facturaReq.getIdCliente());
+			if (opt.isEmpty()) {
+				logger.info("No se encontro el cliente con id {}", facturaReq.getIdCliente() );
+				throw new ZyTrustException(CodigoError.CLIENTE_NO_EXISTE);
+			}
 			
-			// Tiro una nueva y diferente excepcion
-			throw new ZyTrustException(CodigoError.PROBLEMAS_ALMACENAR_FACTURA);
-		} */
-		
-		
 
+			
+			
+			// Detalles de la factura
+			List<ProductoFactura> productos = new ArrayList<>();
+			// List<ProductoFactura> productos = productoFacturaService.buildProductosFacturas(facturaReq.getDetalles());
+			
+			Factura factura = Factura
+					.builder()
+					.fechaEmision(LocalDate.now())
+					.fechaVencimiento(facturaReq.getFechaVencimiento())
+					.productos(productos)
+					.build();
+			factura.setProductos(productos);
+			
+			
+			// Almacenar el PDF de la factura en el FileSystem
+			/*
+			try {
+				archivoService.create("F001-24", "nombrePlantilla", "ruta");	
+			} catch (IOException e) {
+				// logging
+				
+				// Tiro una nueva y diferente excepcion
+				throw new ZyTrustException(CodigoError.PROBLEMAS_ALMACENAR_FACTURA);
+			} */
+			
+			
+			logger.debug("Se creo la factura {}", factura.toString());
+
+		} catch (Exception e) {
+			logger.error(e.toString());
+		}
+		
 	}
 }

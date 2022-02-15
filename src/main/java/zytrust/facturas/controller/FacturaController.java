@@ -1,5 +1,7 @@
 package zytrust.facturas.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /*
  * @(#)Cliente.java
  *
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import zytrust.facturas.dto.FacturaDetailsResponse;
 import zytrust.facturas.dto.FacturaReq;
 import zytrust.facturas.dto.FacturaRequest;
@@ -57,7 +60,8 @@ public class FacturaController {
     @Autowired
     private FacturaConverter converter;
 
-
+    private static final Logger logger = LoggerFactory.getLogger(FacturaController.class);
+    
     /**
      * @return      el objeto factura con el status Http200
      * @throws Exception Excepción durante el proceso de busqueda
@@ -87,7 +91,7 @@ public class FacturaController {
     
     @PostMapping()
     public void crearFactura(@Valid @RequestBody FacturaReq facturaReq) {
-    	
+    	logger.info("Creando la factura con los siguientes datos {}", facturaReq.toString());
     	facturaService.create(facturaReq);
     }
     
